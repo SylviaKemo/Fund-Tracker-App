@@ -3,12 +3,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 
+const authRoutes = require("./routes/authRoute");
+const dashboardRoutes = require("./routes/dashboardRoute");
+const campaignRoutes = require("./routes/campaignRoute");
+const donationRoutes = require("./routes/donationRoute");
 
-const authRoutes = require("./routes/authRoute")
- 
-
-const app = express();  
-
+const app = express();
 
 app.use(express.json());
 
@@ -18,6 +18,9 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/campaign", campaignRoutes);
+app.use("/api/donation", donationRoutes);
 
 
 

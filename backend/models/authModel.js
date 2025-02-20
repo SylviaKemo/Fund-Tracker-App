@@ -5,24 +5,33 @@ const validator = require("validator");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    name: {
-        type: String,
-        required:true,
-    },
+  name: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     required: true,
     unique: true, //ensures an email is used once
+    lowercase: true,
   },
   password: {
     type: String,
     required: true,
   },
+  resetToken: {
+    type: String,
+    default: null,
+  }, // Stores reset token
+  tokenExpiration: {
+    type: Date,
+    default: null,
+  }, // Stores token expiration
 });
 
 userSchema.statics.signup = async function (name, email, password) {
   // validation
-  if (!email || !password) {
+  if (!name || !email || !password) {
     throw Error("All fields must be filled");
   }
 
@@ -41,7 +50,7 @@ userSchema.statics.signup = async function (name, email, password) {
   if (exists) {
     throw Error("Email already in use");
   }
-  
+
   const salt = await bcrypt.genSalt(10);
 
   const hash = await bcrypt.hash(password, salt);
